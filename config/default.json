@@ -1,3 +1,6 @@
 {
-  "jwtPrivateKey": ""
+  "jwtPrivateKey": "",
+  "accessKeyId": "",
+  "secretAccessKey": "",
+  "db": ""
 }

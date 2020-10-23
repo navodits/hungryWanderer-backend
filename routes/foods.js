@@ -3,32 +3,8 @@ const { Food, validate } = require("../models/food");
 const upload = require("../middleware/imageUpload");
 const router = express.Router();
 
-const foodListings = [
-  {
-    id: 1,
-    name: "Fried Rice",
-    quantity: "2 portions",
-    address: "11234 66 Avenue",
-    city: "Surrey",
-  },
-  {
-    id: 2,
-    name: "Chicken Curry",
-    quantity: "1 portions",
-    address: "1255 Boundary Rd ",
-    city: "Burnaby",
-  },
-  {
-    id: 3,
-    name: "Chickpea Curry",
-    quantity: "3.5 portions",
-    address: "4458 Capilano Dr",
-    city: "North Vancouver",
-  },
-];
-
 router.get("/", async (req, res) => {
-  const foods = await Food.find().sort("name");
+  const foods = await Food.find().sort("datePosted");
   res.send(foods);
 });
 
@@ -44,30 +20,33 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", upload, async (req, res) => {
   const imageUris = [];
+  const datePosted = Date.now();
   const files = await req.files;
 
   files.forEach((file) => {
     imageUris.push(file.location);
   });
 
-  // const result = validate(req.body);
+  const result = validate(req.body);
 
-  // if (result.error) {
-  //   res.status(400).send(result.error.details[0].message);
-  // }
-  // let food = new Food({
-  //   name: req.body.name,
-  //   quantity: req.body.quantity,
-  //   category: req.body.category,
-  //   address: req.body.address,
-  //   city: req.body.city,
-  //   datePosted: req.body.datePosted,
-  //   bestBefore: req.body.bestBefore,
-  //   imageUris,
-  // });
+  if (result.error) {
+    return res.status(400).send(result.error.details[0].message);
+  }
+  let food = new Food({
+    name: req.body.name,
+    quantity: req.body.quantity,
+    address: req.body.address,
+    city: req.body.city,
+    expiry: req.body.expiry,
+    userId: req.body.userId,
+    phoneNumber: req.body.phoneNumber,
+    datePosted,
+    imageUris,
+  });
 
-  //food = await food.save();
-  res.send(imageUris);
+  food = await food.save();
+  console.log(food);
+  res.send("Success");
 });
 
 router.put("/:id", async (req, res) => {

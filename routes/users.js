@@ -40,4 +40,18 @@ router.post("/", async (req, res) => {
     .send(_.pick(user, ["_id", "name", "email"]));
 });
 
+router.patch("/pushToken", async (req, res) => {
+  let user = await User.findByIdAndUpdate(
+    req.body.userId,
+    { $set: { pushToken: req.body.pushToken } },
+    { new: true }
+  );
+
+  if (!user) {
+    res.status(404).send(" User Not Found");
+    return;
+  }
+  res.send(user);
+});
+
 module.exports = router;

@@ -3,49 +3,8 @@ const express = require("express");
 const upload = require("../middleware/imageUpload");
 const router = express.Router();
 
-const data = [
-  {
-    id: 1,
-    name: "Milk",
-    category: "dairy",
-    quantity: "2L",
-    address: "11234 66 Avenue",
-    city: "Surrey",
-
-    icon: false,
-  },
-  {
-    id: 2,
-    name: "Cottage Cheese",
-    category: "dairy",
-    quantity: "200g",
-    address: "234 Columbia St",
-    city: "New West",
-
-    icon: true,
-  },
-  {
-    id: 3,
-    name: "Tomatoes",
-    category: "produce",
-    quantity: "5 pieces",
-    address: "2433 Fraser St",
-    city: "Vancouver",
-    icon: false,
-  },
-  {
-    id: 4,
-    name: "Cilantro",
-    category: "produce",
-    quantity: "1 bunch",
-    address: "2433 Fraser St",
-    city: "Vancouver",
-    icon: true,
-  },
-];
-
 router.get("/", async (req, res) => {
-  const ingredients = await Ingredient.find().sort("name");
+  const ingredients = await Ingredient.find().sort("datePosted");
   res.send(ingredients);
 });
 
@@ -86,6 +45,7 @@ router.post("/", upload, async (req, res) => {
     address: req.body.address,
     city: req.body.city,
     expiry: req.body.expiry,
+    userId: req.body.userId,
     datePosted,
     images,
     icon,
@@ -139,7 +99,6 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   const ingredient = await Ingredient.findByIdAndRemove(req.params.id);
-
   if (!ingredient) {
     res.status(404).send("The item with given ID was not found");
     return;

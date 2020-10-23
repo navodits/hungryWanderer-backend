@@ -8,12 +8,6 @@ const foodSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 50,
   },
-  category: {
-    type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 50,
-  },
   quantity: {
     type: String,
     required: true,
@@ -36,13 +30,20 @@ const foodSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  bestBefore: {
+  expiry: {
     type: Date,
     required: true,
   },
   imageUris: {
     type: Array,
     required: true,
+  },
+  userId: {
+    type: String,
+    required: true,
+  },
+  phoneNumber: {
+    type: String,
   },
 });
 
@@ -51,13 +52,12 @@ const Food = mongoose.model("Food", foodSchema);
 function validateFood(food) {
   const schema = Joi.object({
     name: Joi.string().min(2).required(),
-    quantity: Joi.string().min(2).required(),
-    category: Joi.string().min(2).required(),
+    quantity: Joi.string().min(1).required(),
     address: Joi.string().min(2).required(),
     city: Joi.string().min(2).required(),
-    datePosted: Joi.date().required(),
-    bestBefore: Joi.date().required(),
-    imageUris: Joi.array().required(),
+    expiry: Joi.date().required(),
+    userId: Joi.string().required(),
+    phoneNumber: Joi.string(),
   });
 
   return schema.validate(food);

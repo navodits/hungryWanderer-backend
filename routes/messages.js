@@ -1,23 +1,30 @@
 const { Message, validate } = require("../models/message");
+const { User } = require("../models/user");
 const mongoose = require("mongoose");
 const express = require("express");
-const Joi = require("joi");
 const router = express.Router();
+const Joi = require("joi");
 
 router.get("/", async (req, res) => {
-  const message = await Message.find().sort("name");
-  res.send(message);
-});
+  const messages = await Message.find();
 
-router.get("/:id", async (req, res) => {
-  const message = await Message.findById(req.params.id);
+  messages = messages.filter((message) => message.userId === req.body.userId);
 
-  if (!message) {
-    res.status(404).send("The item with given ID was not found");
-    return;
-  }
+  const mapUser = (userId) => {
+    const user = User.findById(userId);
+    return { _id: user._id, name: user.name };
+  };
 
-  res.send(message);
+  const resources = messages.map((message) => ({
+    id: message.id,
+    listingId: message.listingId,
+    dateTime: message.dateTime,
+    content: message.content,
+    fromUser: mapUser(message.fromUserId),
+    toUser: mapUser(message.toUserId),
+  }));
+
+  res.send(resources);
 });
 
 router.post("/", (req, res) => {
@@ -30,23 +37,6 @@ router.post("/", (req, res) => {
     text: req.body.text,
     phone: req.body.phone,
   });
-});
-router.put("/:id", (req, res) => {
-  const result = validate(req.body);
-  if (result.error) {
-    res.status(400).send(result.error.details[0].message);
-  }
-  const message = Message.findByIdAndUpdate(
-    req.params.id,
-    { name: req.body.name, text: req.body.text, phone: req.body.phone },
-    { new: true }
-  );
-  if (!message) {
-    res.status(404).send("The item with given ID was not found");
-    return;
-  }
-
-  res.send(message);
 });
 
 router.delete("/:id", (req, res) => {

@@ -47,6 +47,10 @@ const ingredientSchema = new mongoose.Schema({
     type: Array,
     required: true,
   },
+  userId: {
+    type: String,
+    required: true,
+  },
 });
 
 const Ingredient = mongoose.model("Ingredient", ingredientSchema);
@@ -61,6 +65,7 @@ function validateIngredient(ingredient) {
     phoneNumber: Joi.string().min(10).required(),
     expiry: Joi.date().required(),
     images: Joi.array(),
+    userId: Joi.string().required(),
   });
 
   return schema.validate(ingredient);

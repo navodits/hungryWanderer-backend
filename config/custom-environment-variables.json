@@ -1,3 +1,6 @@
 {
-  "jwtPrivateKey": "hungryWanderer_jwtPrivateKey"
+  "jwtPrivateKey": "hungryWanderer_jwtPrivateKey",
+  "accessKeyId": "hungryWanderer_accessKeyId",
+  "secretAccessKey": "hungryWanderer_secretAccessKey",
+  "db": "hungryWanderer_db"
 }
