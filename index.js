@@ -26,7 +26,7 @@ const db = config.get("db");
 
 mongoose
   .connect(
-    "mongodb+srv://admin:admin@cluster0.g2xls.mongodb.net/hungryWanderer?retryWrites=true&w=majority"
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
   )
   .then(() => console.log("Connnected to MongoDB..."))
   .catch((err) => console.error("Counld not connect to MongoDB...", err));
