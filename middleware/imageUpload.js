@@ -28,11 +28,9 @@ const upload = multer({
     s3,
     bucket: "hungry-wanderer",
     metadata: function (req, file, cb) {
-      console.log(file);
       cb(null, { fieldName: file.fieldname });
     },
     Key: function (req, file, cb) {
-      console.log(file);
       cb(null, file.fieldname + "_" + Date.now);
     },
   }),

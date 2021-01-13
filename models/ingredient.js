@@ -40,6 +40,10 @@ const ingredientSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  phoneNumber: {
+    type: String,
+    required: true,
+  },
   icon: {
     type: Boolean,
   },

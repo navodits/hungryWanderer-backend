@@ -21,8 +21,8 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", upload, async (req, res) => {
   let icon = true;
-  let images = [];
-  let datePosted = Date.now();
+  let imageUris = [];
+  const datePosted = Date.now();
 
   const files = await req.files;
 
@@ -34,7 +34,7 @@ router.post("/", upload, async (req, res) => {
     icon = false;
   } else {
     files.forEach((file) => {
-      images.push(file.location);
+      imageUris.push(file.location);
     });
   }
 
@@ -46,8 +46,9 @@ router.post("/", upload, async (req, res) => {
     city: req.body.city,
     expiry: req.body.expiry,
     userId: req.body.userId,
+    phoneNumber: req.body.phoneNumber,
     datePosted,
-    images,
+    imageUris,
     icon,
   });
 
@@ -56,15 +57,18 @@ router.post("/", upload, async (req, res) => {
   res.send("Success");
 });
 
-router.put("/:id", async (req, res) => {
-  const icon = true;
-  const imageUris = [];
+router.put("/:id", upload, async (req, res) => {
+  let icon = true;
+  let imageUris = [];
+  let datePosted = Date.now();
   const result = validate(req.body);
+
+  const files = await req.files;
 
   if (result.error) {
     res.status(400).send(result.error.details[0].message);
   }
-  if (req.files.length == 0) {
+  if (files.length == 0) {
     icon = false;
   } else {
     const files = req.files;
@@ -81,7 +85,8 @@ router.put("/:id", async (req, res) => {
       category: req.body.category,
       address: req.body.address,
       city: req.body.city,
-      bestBefore: req.body.bestBefore,
+      expiry: req.body.expiry,
+      phoneNumber: req.body.phoneNumber,
       datePosted,
       icon,
       imageUris,

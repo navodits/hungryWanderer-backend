@@ -1,6 +1,7 @@
 const express = require("express");
 const { Food, validate } = require("../models/food");
 const upload = require("../middleware/imageUpload");
+const { HttpResponse } = require("aws-sdk");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -45,38 +46,32 @@ router.post("/", upload, async (req, res) => {
   });
 
   food = await food.save();
-  console.log(food);
   res.send("Success");
 });
 
-router.put("/:id", async (req, res) => {
-  const icon = true;
+router.put("/:id", upload, async (req, res) => {
   const imageUris = [];
   const result = validate(req.body);
-
+  const datePosted = Date.now();
+  const files = await req.files;
   if (result.error) {
     res.status(400).send(result.error.details[0].message);
   }
-  if (req.files.length == 0) {
-    icon = false;
-  } else {
-    const files = req.files;
 
-    files.forEach((file) => {
-      imageUris.push(file.location);
-    });
-  }
+  files.forEach((file) => {
+    imageUris.push(file.location);
+  });
 
   const food = await Food.findByIdAndUpdate(
     req.params.id,
     {
       name: req.body.name,
       quantity: req.body.quantity,
-      category: req.body.category,
       address: req.body.address,
       city: req.body.city,
-      datePosted: req.body.datePosted,
+      phoneNumber: req.body.phoneNumber,
       bestBefore: req.body.bestBefore,
+      datePosted,
       imageUris,
     },
     { new: true }
@@ -86,7 +81,7 @@ router.put("/:id", async (req, res) => {
     res.status(404).send("The item with given ID was not found");
     return;
   }
-  res.send(imageUris);
+  res.send(food);
 });
 
 router.delete("/:id", async (req, res) => {

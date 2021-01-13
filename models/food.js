@@ -34,7 +34,7 @@ const foodSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  imageUris: {
+  images: {
     type: Array,
     required: true,
   },
@@ -44,6 +44,7 @@ const foodSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: String,
+    required: true,
   },
 });
 
@@ -57,6 +58,7 @@ function validateFood(food) {
     city: Joi.string().min(2).required(),
     expiry: Joi.date().required(),
     userId: Joi.string().required(),
+    images: Joi.array(),
     phoneNumber: Joi.string(),
   });
 
