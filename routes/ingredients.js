@@ -77,7 +77,6 @@ router.put("/:id", upload, async (req, res) => {
       imageUris.push(file.location);
     });
   }
-  console.log(imageUris);
   const ingredient = await Ingredient.findOneAndReplace(
     { _id: req.params.id },
     {
@@ -95,8 +94,6 @@ router.put("/:id", upload, async (req, res) => {
     },
     { new: true }
   );
-  console.log(ingredient);
-
   if (!ingredient) {
     res.status(404).send("The item with given ID was not found");
     return;
