@@ -47,9 +47,8 @@ const ingredientSchema = new mongoose.Schema({
   icon: {
     type: Boolean,
   },
-  images: {
+  imageUris: {
     type: Array,
-    required: true,
   },
   userId: {
     type: String,
@@ -68,7 +67,7 @@ function validateIngredient(ingredient) {
     city: Joi.string().min(2).required(),
     phoneNumber: Joi.string().min(10).required(),
     expiry: Joi.date().required(),
-    images: Joi.array(),
+    imageUris: Joi.array(),
     userId: Joi.string().required(),
   });
 

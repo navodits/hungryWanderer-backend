@@ -62,7 +62,7 @@ router.put("/:id", upload, async (req, res) => {
     imageUris.push(file.location);
   });
 
-  const food = await Food.findByIdAndUpdate(
+  const food = await Food.findOneAndReplace(
     req.params.id,
     {
       name: req.body.name,
@@ -71,6 +71,7 @@ router.put("/:id", upload, async (req, res) => {
       city: req.body.city,
       phoneNumber: req.body.phoneNumber,
       bestBefore: req.body.bestBefore,
+      userId: req.body.userId,
       datePosted,
       imageUris,
     },

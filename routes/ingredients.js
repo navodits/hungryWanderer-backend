@@ -77,8 +77,9 @@ router.put("/:id", upload, async (req, res) => {
       imageUris.push(file.location);
     });
   }
-  const ingredient = await Ingredient.findByIdAndUpdate(
-    req.params.id,
+  console.log(imageUris);
+  const ingredient = await Ingredient.findOneAndReplace(
+    { _id: req.params.id },
     {
       name: req.body.name,
       quantity: req.body.quantity,
@@ -87,12 +88,14 @@ router.put("/:id", upload, async (req, res) => {
       city: req.body.city,
       expiry: req.body.expiry,
       phoneNumber: req.body.phoneNumber,
+      userId: req.body.userId,
+      imageUris,
       datePosted,
       icon,
-      imageUris,
     },
     { new: true }
   );
+  console.log(ingredient);
 
   if (!ingredient) {
     res.status(404).send("The item with given ID was not found");
